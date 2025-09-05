@@ -224,7 +224,7 @@ FROM olist_sales_data_set.olist_orders_dataset o
 JOIN olist_sales_data_set.olist_customers_dataset c ON o.customer_id = c.customer_id
 LEFT JOIN olist_sales_data_set.olist_order_payments_dataset p ON o.order_id = p.order_id
 GROUP BY o.customer_id, c.customer_state, c.customer_city
-ORDER BY SUM(p.payment_value) DESC
+ORDER BY COALESCE(SUM(p.payment_value), 0) DESC
 LIMIT 10;
 
 -- Business Question 15: Monthly revenue trend
