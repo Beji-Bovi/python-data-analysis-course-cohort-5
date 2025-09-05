@@ -59,7 +59,7 @@ SELECT
     character_maximum_length AS "Max Length",
     column_default AS "Default Value"
 FROM information_schema.columns
-WHERE table_name = 'orders' 
+WHERE table_name = 'olist_orders_dataset' 
   AND table_schema = 'olist_sales_data_set'
 ORDER BY ordinal_position;
 
@@ -69,7 +69,7 @@ SELECT
     data_type AS "Data Type",
     is_nullable AS "Can Be Empty?"
 FROM information_schema.columns
-WHERE table_name = 'customers'
+WHERE table_name = 'olist_customers_dataset'
   AND table_schema = 'olist_sales_data_set'
 ORDER BY ordinal_position;
 
@@ -151,7 +151,8 @@ SELECT
     COUNT(order_id) AS "Non-null Order IDs",
     COUNT(order_status) AS "Non-null Status", 
     COUNT(order_purchase_timestamp) AS "Non-null Purchase Dates",
-    COUNT(order_delivered_customer_date) AS "Non-null Delivery Dates"
+    COUNT(order_delivered_customer_date) AS "Non-null Delivery Dates",
+    (COUNT(*)-COUNT(order_delivered_customer_date)) AS "Delivery Missing Dates Values",(COUNT(*)-COUNT(order_delivered_customer_date)) * 100 / COUNT(*) AS "Missing Delivery Date %"
 FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Calculate missing data percentages
@@ -290,12 +291,27 @@ LIMIT 10;
 
 -- 1. How many columns does the products table have?
 -- (Write a query to find out)
+SELECT
+    COUNT(*) AS "Number of Columns"
+    FROM information_schema.columns
+    WHERE table_name = 'olist_products_dataset'
+        AND table_schema = 'olist_sales_data_set';
+
 
 -- 2. What data types are used in the products table?
 -- (Explore the column information)
+SELECT 
+    column_name AS "Column Name",
+    data_type AS "Data Type"
+FROM information_schema.columns
+WHERE table_name = 'olist_products_dataset'
+    AND table_schema = 'olist_sales_data_set';
 
 -- 3. How many products are there total?
 -- (Count the rows)
+SELECT
+    COUNT(*) AS "Total Products"
+FROM olist_sales_data_set.olist_products_dataset;
 
 -- 4. Are there any missing values in product_category_name?
 -- (Compare COUNT(*) with COUNT(product_category_name))

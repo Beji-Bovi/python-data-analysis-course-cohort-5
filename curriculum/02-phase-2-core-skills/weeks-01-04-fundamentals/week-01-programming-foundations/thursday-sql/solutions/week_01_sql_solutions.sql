@@ -109,8 +109,8 @@ SELECT
     COUNT(*) AS "Total Payments",
     MIN(payment_value) AS "Minimum Payment",
     MAX(payment_value) AS "Maximum Payment",
-    ROUND(AVG(payment_value), 2) AS "Average Payment",
-    ROUND(SUM(payment_value), 2) AS "Total Revenue"
+    ROUND(CAST(AVG(payment_value) AS numeric), 2) AS "Average Payment",
+    ROUND(CAST(SUM(payment_value) AS numeric), 2) AS "Total Revenue"
 FROM olist_sales_data_set.olist_order_payments_dataset;
 
 -- Exercise 14: Missing Data Check
@@ -217,8 +217,8 @@ ORDER BY review_score;
 SELECT 
     payment_type,
     COUNT(*) AS transaction_count,
-    ROUND(SUM(payment_value), 2) AS total_revenue,
-    ROUND(AVG(payment_value), 2) AS avg_transaction_value
+    ROUND(CAST(SUM(payment_value) AS numeric), 2) AS total_revenue,
+    ROUND(CAST(AVG(payment_value) AS numeric), 2) AS avg_transaction_value
 FROM olist_sales_data_set.olist_order_payments_dataset
 GROUP BY payment_type
 ORDER BY SUM(payment_value) DESC;
@@ -227,8 +227,8 @@ ORDER BY SUM(payment_value) DESC;
 SELECT 
     c.customer_state,
     COUNT(DISTINCT o.order_id) AS total_orders,
-    ROUND(SUM(p.payment_value), 2) AS total_revenue,
-    ROUND(AVG(p.payment_value), 2) AS avg_order_value
+    ROUND(CAST(SUM(p.payment_value) AS numeric), 2) AS total_revenue,
+    ROUND(CAST(AVG(p.payment_value) AS numeric), 2) AS avg_order_value
 FROM olist_sales_data_set.olist_orders_dataset o
 JOIN olist_sales_data_set.olist_customers_dataset c ON o.customer_id = c.customer_id
 LEFT JOIN olist_sales_data_set.olist_order_payments_dataset p ON o.order_id = p.order_id
