@@ -124,3 +124,34 @@ When working with this repository:
 - **December Break:** Classes only December 3, 4, 10, 11 then extended break until January 8, 2026
 - **Program Completion:** May 1, 2026 (extended from original March 27, 2026 due to holiday accommodations)
 - **Total Instructional Impact:** 11 lost sessions accommodated through timeline extension
+
+## MCP Server
+Live data set: olist_marketing_data_set and olist_sales_data_set schema in the database. Use supabase MCP server. Always ensure SQL Data content aligns with Python. So always start with SQL content by fetching live data and then cascade to Python.
+
+## Course content creation order. 
+1. Access `/home/odunayo12/python-data-analysis-course-cohort-5/docs/syllabus.md` 
+2. Access the `olist_marketing_data_set` and `olist_sales_data_set` schema for live data relevant to the topic to be developed. 
+3. Create Lesson plan sql and python in the relevant folders based on the accessed data. 
+4. Create Data  and excercises for python Class similar to sql data. 
+5. Create SQL Content content for thursday sql classes,  excercise, and solutions in the relevant folders. 
+6. Create Python Content,  excercise, and solutions in the relevant folders.
+7. Include the solutions file in git ignore
+
+## Phase 2 Weekly Folder Order
+```
+week-<number: 01|02|...>-<short-form-week-topic>/ #eg. week-01-programming-foundations/
+├── wednesday-python/
+│   ├── exercises/
+│   ├── lecture-materials/
+│   │   ├── datasets/
+│   │   └── notebooks/
+│   ├── resources/
+│   └── solutions/
+└── thursday-sql/
+    ├── exercises/
+    ├── lecture-materials/
+    │   ├── notebooks/
+    │   └── scripts/
+    ├── resources/
+    └── solutions/
+```
