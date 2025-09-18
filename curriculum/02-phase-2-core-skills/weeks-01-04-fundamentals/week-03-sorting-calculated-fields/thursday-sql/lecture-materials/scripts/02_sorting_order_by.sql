@@ -18,7 +18,7 @@ SELECT
     price,
     freight_value,
     price + freight_value AS total_order_value,
-    ROUND((freight_value / price * 100), 2) AS freight_percentage
+    ROUND((freight_value / price * 100)::NUMERIC, 2) AS freight_percentage
 FROM olist_sales_data_set.olist_order_items_dataset
 WHERE price > 0
 ORDER BY total_order_value DESC  -- Highest value first
@@ -30,7 +30,7 @@ SELECT
     product_id,
     price,
     freight_value,
-    ROUND((freight_value / price * 100), 2) AS freight_percentage
+    ROUND((freight_value / price * 100)::NUMERIC, 2) AS freight_percentage
 FROM olist_sales_data_set.olist_order_items_dataset
 WHERE price > 50  -- Focus on meaningful transactions
 ORDER BY freight_value ASC  -- Lowest freight first
@@ -43,7 +43,7 @@ SELECT
     p.product_weight_g,
     pct.product_category_name_english,
     CASE 
-        WHEN p.product_weight_g > 0 THEN ROUND(oi.price / p.product_weight_g, 4)
+        WHEN p.product_weight_g > 0 THEN ROUND(oi.price / p.product_weight_g)::NUMERIC, 4)
         ELSE NULL 
     END AS price_per_gram
 FROM olist_sales_data_set.olist_order_items_dataset oi
@@ -155,15 +155,15 @@ WITH category_metrics AS (
 SELECT 
     category,
     order_count,
-    ROUND(avg_price, 2) as avg_price,
-    ROUND(avg_freight, 2) as avg_freight,
-    ROUND(avg_total_value, 2) as avg_total_value,
-    ROUND(avg_freight_pct, 1) as avg_freight_pct,
-    ROUND(max_price, 2) as max_price,
-    ROUND(min_price, 2) as min_price,
-    
+    ROUND((avg_price)::NUMERIC, 2) as avg_price,
+    ROUND((avg_freight)::NUMERIC, 2) as avg_freight,
+    ROUND((avg_total_value)::NUMERIC, 2) as avg_total_value,
+    ROUND((avg_freight_pct)::NUMERIC, 1) as avg_freight_pct,
+    ROUND((max_price)::NUMERIC, 2) as max_price,
+    ROUND((min_price)::NUMERIC, 2) as min_price,
+
     -- Category performance score (higher is better)
-    ROUND((avg_price * order_count / 1000), 2) as performance_score
+    ROUND((avg_price * order_count / 1000)::NUMERIC, 2) as performance_score
 FROM category_metrics
 ORDER BY 
     performance_score DESC,  -- Best performing categories first
@@ -186,20 +186,20 @@ SELECT
     -- Efficiency metrics
     CASE 
         WHEN p.product_weight_g > 0 
-        THEN ROUND(oi.price / p.product_weight_g, 4)
+        THEN ROUND((oi.price::NUMERIC / p.product_weight_g)::NUMERIC, 4)
         ELSE NULL 
     END AS price_per_gram,
     
     CASE 
         WHEN (p.product_length_cm * p.product_height_cm * p.product_width_cm) > 0
-        THEN ROUND(oi.price / (p.product_length_cm * p.product_height_cm * p.product_width_cm), 6)
+        THEN ROUND(oi.price::NUMERIC / (p.product_length_cm * p.product_height_cm * p.product_width_cm)::NUMERIC, 6)
         ELSE NULL
     END AS value_density,
     
     -- Combined efficiency score
     CASE 
         WHEN p.product_weight_g > 0 AND (p.product_length_cm * p.product_height_cm * p.product_width_cm) > 0
-        THEN ROUND(oi.price / SQRT(p.product_weight_g * (p.product_length_cm * p.product_height_cm * p.product_width_cm)), 8)
+        THEN ROUND(oi.price::NUMERIC / SQRT(p.product_weight_g::NUMERIC * (p.product_length_cm * p.product_height_cm * p.product_width_cm))::NUMERIC, 8)
         ELSE NULL
     END AS efficiency_score
 
@@ -230,9 +230,9 @@ SELECT
     oi.price,
     oi.freight_value,
     p.product_weight_g,
-    
-    ROUND((oi.freight_value / oi.price * 100), 2) AS freight_percentage,
-    
+
+    ROUND((oi.freight_value / oi.price * 100)::NUMERIC, 2) AS freight_percentage,
+
     -- Freight efficiency categories
     CASE 
         WHEN oi.freight_value = 0 THEN 'Free Shipping'
@@ -245,7 +245,7 @@ SELECT
     -- Weight-based shipping cost
     CASE 
         WHEN p.product_weight_g > 0 
-        THEN ROUND(oi.freight_value / (p.product_weight_g / 1000.0), 2)
+        THEN ROUND(oi.freight_value / (p.product_weight_g::NUMERIC / 1000.0)::NUMERIC, 2)
         ELSE NULL
     END AS cost_per_kg
 
