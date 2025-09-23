@@ -44,9 +44,9 @@ ORDER BY revenue_rank;
 SELECT 
     t.product_category_name_english as category,
     COUNT(r.review_id) as review_count,
-    ROUND(AVG(r.review_score), 2) as avg_rating,
-    RANK() OVER (ORDER BY AVG(r.review_score) DESC) as satisfaction_rank,
-    DENSE_RANK() OVER (ORDER BY AVG(r.review_score) DESC) as satisfaction_dense_rank
+    r.review_score as avg_rating,
+    RANK() OVER (ORDER BY r.review_score) DESC) as satisfaction_rank,
+    DENSE_RANK() OVER ORDER BY r.review_score DESC as satisfaction_dense_rank
 FROM olist_sales_data_set.olist_order_reviews_dataset r
 JOIN olist_sales_data_set.olist_orders_dataset o ON r.order_id = o.order_id
 JOIN olist_sales_data_set.olist_order_items_dataset oi ON o.order_id = oi.order_id

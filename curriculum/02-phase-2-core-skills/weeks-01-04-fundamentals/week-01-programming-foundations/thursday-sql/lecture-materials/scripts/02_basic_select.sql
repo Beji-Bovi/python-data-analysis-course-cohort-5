@@ -234,8 +234,12 @@ LIMIT 10;
 -- =============================================================================
 
 -- 1. Show me the first 3 rows from the products table
+SELECT *
+FROM olist_sales_data_set.olist_products_dataset
+LIMIT 3;
 
 -- 2. Count how many payment records we have
+SELECT
 
 -- 3. Show me the 5 most recent orders (newest first)
 
