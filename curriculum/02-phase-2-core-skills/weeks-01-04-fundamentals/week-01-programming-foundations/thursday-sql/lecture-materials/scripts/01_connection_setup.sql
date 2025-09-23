@@ -37,7 +37,7 @@ ORDER BY schema_name;
 SELECT 
     table_name AS "Table Name",
     table_type AS "Type"
-FROM information_schema.tables 
+FROM information_schema.tables -- Information schema is like a data catalog
 WHERE table_schema = 'olist_sales_data_set'
 ORDER BY table_name;
 
@@ -184,11 +184,11 @@ If any of the above tests fail, here's what to check:
 -- =============================================================================
 
 -- Final Test: Generate a success report
-SELECT 
-    'CONNECTION SUCCESS!' AS status,
-    current_timestamp AS connected_at,
-    'You can access the same NaijaCommerce data from yesterday!' AS message,
-    'Ready to learn SQL!' AS next_step;
+-- SELECT 'Connected to Database!' AS status;
+--     'CONNECTION SUCCESS!' AS status,
+--     current_timestamp AS connected_at,
+--     'You can access the same NaijaCommerce data from yesterday!' AS message,
+--     'Ready to learn SQL!' AS next_step;
 
 -- =============================================================================
 -- INSTRUCTOR NOTES: What Each Test Verifies
