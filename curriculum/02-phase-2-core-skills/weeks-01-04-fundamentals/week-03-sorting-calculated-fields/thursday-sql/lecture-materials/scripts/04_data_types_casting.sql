@@ -90,7 +90,11 @@ SELECT
     
     -- Convert numbers to formatted strings
     CAST(oi.price AS VARCHAR) || ' BRL' AS price_display,
+<<<<<<< HEAD
     CAST(ROUND(oi.price * 500, 0) AS VARCHAR) || ' NGN' AS price_naira_display,
+=======
+    CAST(ROUND(CAST(oi.price * 500 AS NUMERIC), 0) AS VARCHAR) || ' NGN' AS price_naira_display,
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
     
     -- Conditional string formatting
     CASE 
@@ -317,7 +321,11 @@ SELECT
     -- oi.price || ' BRL'  -- This would cause an error
     
     -- ✅ CORRECT: Explicit string conversion
+<<<<<<< HEAD
     CAST(ROUND(oi.price, 2) AS VARCHAR) || ' BRL' AS price_formatted,
+=======
+    CAST(ROUND(oi.price::NUMERIC, 2) AS VARCHAR) || ' BRL' AS price_formatted,
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
     
     -- ❌ WRONG: Assuming values are never NULL
     -- ROUND(oi.price / p.product_weight_g, 2)  -- Fails if weight is NULL

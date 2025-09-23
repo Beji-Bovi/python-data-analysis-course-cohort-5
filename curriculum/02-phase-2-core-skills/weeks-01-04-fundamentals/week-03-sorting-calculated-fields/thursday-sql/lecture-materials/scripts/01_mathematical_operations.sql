@@ -28,7 +28,11 @@ SELECT
     
     -- Division: Price per freight unit (price efficiency)
     CASE 
+<<<<<<< HEAD
         WHEN freight_value > 0 THEN ROUND(price / freight_value, 2)
+=======
+        WHEN freight_value > 0 THEN ROUND(price / freight_value) AS NUMERIC), 2)
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL 
     END AS price_freight_ratio
 
@@ -54,11 +58,19 @@ SELECT
     oi.price + oi.freight_value AS total_order_value,
     
     -- Freight as percentage of price (key logistics KPI)
+<<<<<<< HEAD
     ROUND((oi.freight_value / oi.price * 100), 2) AS freight_percentage,
     
     -- Price per gram (efficiency for weight-based products)
     CASE 
         WHEN p.product_weight_g > 0 THEN ROUND(oi.price / p.product_weight_g, 4)
+=======
+    ROUND(CAST(oi.freight_value / oi.price * 100 AS NUMERIC), 2) AS freight_percentage,
+    
+    -- Price per gram (efficiency for weight-based products)
+    CASE 
+        WHEN p.product_weight_g > 0 THEN ROUND((oi.price::NUMERIC / p.product_weight_g::NUMERIC), 4)
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL 
     END AS price_per_gram,
     
@@ -68,13 +80,21 @@ SELECT
     -- Value density (price per cubic cm)
     CASE 
         WHEN (p.product_length_cm * p.product_height_cm * p.product_width_cm) > 0
+<<<<<<< HEAD
         THEN ROUND(oi.price / (p.product_length_cm * p.product_height_cm * p.product_width_cm), 6)
+=======
+        THEN ROUND(oi.price::NUMERIC / (p.product_length_cm * p.product_height_cm * p.product_width_cm)::NUMERIC, 6)
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS value_density,
     
     -- Shipping efficiency score (lower is better)
     CASE 
+<<<<<<< HEAD
         WHEN p.product_weight_g > 0 THEN ROUND(oi.freight_value / p.product_weight_g, 4)
+=======
+        WHEN p.product_weight_g > 0 THEN ROUND((oi.freight_value::NUMERIC / p.product_weight_g::NUMERIC), 4)
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS shipping_cost_per_gram
 
@@ -111,7 +131,11 @@ SELECT
     oi.price - (oi.price * 0.60) - (oi.price * 0.15) AS estimated_gross_profit,
     
     -- Gross profit margin percentage
+<<<<<<< HEAD
     ROUND(((oi.price - (oi.price * 0.75)) / oi.price * 100), 2) AS gross_profit_margin_pct,
+=======
+    ROUND(((oi.price - (oi.price * 0.75)) / oi.price * 100)::NUMERIC, 2) AS gross_profit_margin_pct,
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
     
     -- Revenue per order item
     (oi.price + oi.freight_value) / oi.order_item_id AS revenue_per_item,
@@ -145,7 +169,11 @@ SELECT
     oi.price - AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) AS price_diff_from_avg,
     
     -- Price as percentage of category average
+<<<<<<< HEAD
     ROUND((oi.price / AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) * 100), 1) AS price_vs_category_avg_pct,
+=======
+    ROUND((oi.price / AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) * 100)::NUMERIC, 1) AS price_vs_category_avg_pct,
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
     
     -- Price ranking within category
     RANK() OVER (PARTITION BY pct.product_category_name_english ORDER BY oi.price DESC) AS price_rank_in_category
@@ -180,19 +208,32 @@ SELECT
     END AS pricing_pattern,
     
     -- Efficiency ratios for business analysis
+<<<<<<< HEAD
     ROUND(oi.freight_value / oi.price, 3) AS freight_to_price_ratio,
     
     -- Weight-based shipping efficiency
     CASE 
         WHEN p.product_weight_g > 0 
         THEN ROUND(oi.freight_value / (p.product_weight_g / 1000.0), 2) -- Cost per kg
+=======
+    ROUND(oi.freight_value / oi.price::NUMERIC, 3) AS freight_to_price_ratio,
+
+    -- Weight-based shipping efficiency
+    CASE 
+        WHEN p.product_weight_g > 0 
+        THEN ROUND(oi.freight_value / (p.product_weight_g / 1000.0)::NUMERIC, 2) -- Cost per kg
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS shipping_cost_per_kg,
     
     -- Value proposition score (higher is better)
     CASE 
         WHEN oi.freight_value > 0 AND p.product_weight_g > 0
+<<<<<<< HEAD
         THEN ROUND((oi.price * 1000) / (oi.freight_value * p.product_weight_g), 2)
+=======
+        THEN ROUND((oi.price * 1000) / (oi.freight_value * p.product_weight_g)::NUMERIC, 2)
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS value_proposition_score
 

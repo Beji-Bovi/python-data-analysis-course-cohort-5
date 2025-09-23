@@ -239,11 +239,22 @@ FROM olist_sales_data_set.olist_products_dataset
 LIMIT 3;
 
 -- 2. Count how many payment records we have
+<<<<<<< HEAD
 SELECT
+=======
+SELECT COUNT(*) AS "Total Payments"
+FROM olist_sales_data_set.olist_order_payments_dataset;
+>>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
 
 -- 3. Show me the 5 most recent orders (newest first)
+SELECT *
+FROM olist_sales_data_set.olist_orders_dataset
+ORDER BY order_purchase_timestamp DESC
+LIMIT 5;
 
 -- 4. List all unique payment types
+SELECT DISTINCT payment_type AS "Payment Type"
+FROM olist_sales_data_set.olist_order_payments_dataset;
 
 -- (Solutions in the solutions folder!)
 
