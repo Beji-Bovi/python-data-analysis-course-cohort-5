@@ -325,8 +325,12 @@ FROM olist_sales_data_set.olist_products_dataset;
 -- 5. What are the top 10 product categories by count?
 -- (Use GROUP BY and COUNT)
 SELECT
-COUNT (*) AS "Number of Products",
-
+    product_category_name AS "Product Category",
+    COUNT (*) AS "Number of Products"
+FROM olist_sales_data_set.olist_products_dataset
+GROUP BY product_category_name
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
 -- Solutions provided in the solutions folder!
 
