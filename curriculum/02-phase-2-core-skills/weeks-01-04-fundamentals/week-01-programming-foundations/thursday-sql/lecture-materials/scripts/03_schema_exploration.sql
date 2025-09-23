@@ -152,7 +152,8 @@ SELECT
     COUNT(order_status) AS "Non-null Status", 
     COUNT(order_purchase_timestamp) AS "Non-null Purchase Dates",
     COUNT(order_delivered_customer_date) AS "Non-null Delivery Dates",
-    (COUNT(*)-COUNT(order_delivered_customer_date)) AS "Delivery Missing Dates Values",(COUNT(*)-COUNT(order_delivered_customer_date)) * 100 / COUNT(*) AS "Missing Delivery Date %"
+    (COUNT(*)-COUNT(order_delivered_customer_date)) AS "Delivery Missing Dates Values",
+    (COUNT(*)-COUNT(order_delivered_customer_date)) * 100 / COUNT(*) AS "Missing Delivery Date %"
 FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Calculate missing data percentages
@@ -292,9 +293,10 @@ LIMIT 10;
 -- 1. How many columns does the products table have?
 -- (Write a query to find out)
 SELECT
-<<<<<<< HEAD
 COUNT (*) AS "Number of Columns"
 FROM information_schema.columns
+WHERE table_name = 'olist_products_dataset'
+  AND table_schema = 'olist_sales_data_set';
 WHERE table_name = 'olist_products_dataset';
 
 -- 2. What data types are used in the products table?
@@ -306,31 +308,11 @@ is_nullable AS "Can be Empty?",
 character_maximum_length AS "Max Length"
 FROM information_schema.columns
 WHERE table_name = 'olist_products_dataset';
-=======
-    COUNT(*) AS "Number of Columns"
-    FROM information_schema.columns
-    WHERE table_name = 'olist_products_dataset'
-        AND table_schema = 'olist_sales_data_set';
-
-
--- 2. What data types are used in the products table?
--- (Explore the column information)
-SELECT 
-    column_name AS "Column Name",
-    data_type AS "Data Type"
-FROM information_schema.columns
-WHERE table_name = 'olist_products_dataset'
-    AND table_schema = 'olist_sales_data_set';
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
 
 -- 3. How many products are there total?
 -- (Count the rows)
 SELECT
-<<<<<<< HEAD
 COUNT (*) AS "Number of Rows"
-=======
-    COUNT(*) AS "Total Products"
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
 FROM olist_sales_data_set.olist_products_dataset;
 
 -- 4. Are there any missing values in product_category_name?
@@ -339,8 +321,11 @@ SELECT COUNT (*) AS "Total Rows",
 COUNT (product_category_name) AS "Non-null Product Categories",
 COUNT (*) - COUNT (product_category_name) AS "Missing Product Categories"
 FROM olist_sales_data_set.olist_products_dataset;
+
 -- 5. What are the top 10 product categories by count?
 -- (Use GROUP BY and COUNT)
+SELECT
+COUNT (*) 
 
 -- Solutions provided in the solutions folder!
 
