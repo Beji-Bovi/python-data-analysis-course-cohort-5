@@ -91,7 +91,7 @@ WITH monthly_sales AS (
         EXTRACT(YEAR FROM o.order_purchase_timestamp) AS year,
         EXTRACT(MONTH FROM o.order_purchase_timestamp) AS month,
         COUNT(DISTINCT o.order_id) AS total_orders,
-        SUM(oi.price) AS total_revenue,
+        SUM(oi.price::NUMERIC) AS total_revenue,
         COUNT(DISTINCT o.customer_id) AS unique_customers
     FROM olist_sales_data_set.olist_orders_dataset o
     JOIN olist_sales_data_set.olist_order_items_dataset oi ON o.order_id = oi.order_id
@@ -106,18 +106,18 @@ SELECT
     total_revenue,
     unique_customers,
     -- Compare with same month previous year using LAG window function
-    LAG(total_orders, 12) OVER (ORDER BY year, month) AS prev_year_orders,
-    LAG(total_revenue, 12) OVER (ORDER BY year, month) AS prev_year_revenue,
+    LAG(total_orders, 11) OVER (ORDER BY year, month) AS prev_year_orders,
+    LAG(total_revenue, 11) OVER (ORDER BY year, month) AS prev_year_revenue,
     -- Calculate year-over-year growth
     CASE
-        WHEN LAG(total_orders, 12) OVER (ORDER BY year, month) IS NOT NULL THEN
-            ROUND((total_orders - LAG(total_orders, 12) OVER (ORDER BY year, month)) * 100.0 /
-                  LAG(total_orders, 12) OVER (ORDER BY year, month), 2)
+        WHEN LAG(total_orders, 11) OVER (ORDER BY year, month) IS NOT NULL THEN
+            ROUND((total_orders - LAG(total_orders, 11) OVER (ORDER BY year, month)) * 100.0 /
+                  LAG(total_orders, 11) OVER (ORDER BY year, month), 2)
     END AS orders_yoy_growth_percent,
     CASE
-        WHEN LAG(total_revenue, 12) OVER (ORDER BY year, month) IS NOT NULL THEN
-            ROUND((total_revenue - LAG(total_revenue, 12) OVER (ORDER BY year, month)) * 100.0 /
-                  LAG(total_revenue, 12) OVER (ORDER BY year, month), 2)
+        WHEN LAG(total_revenue, 11) OVER (ORDER BY year, month) IS NOT NULL THEN
+            ROUND((total_revenue - LAG(total_revenue, 11) OVER (ORDER BY year, month)) * 100.0 /
+                  LAG(total_revenue, 11) OVER (ORDER BY year, month), 2)
     END AS revenue_yoy_growth_percent
 FROM monthly_sales
 ORDER BY year, month;
@@ -207,8 +207,8 @@ SELECT
         (SUM(COUNT(DISTINCT o.order_id)) OVER () / 12), 2
     ) AS seasonal_index_orders,
     ROUND(
-        SUM(oi.price) * 100.0 /
-        (SUM(SUM(oi.price)) OVER () / 12), 2
+        SUM(oi.price::NUMERIC) * 100.0 /
+        (SUM(SUM(oi.price::NUMERIC)) OVER () / 12), 2
     ) AS seasonal_index_revenue
 FROM olist_sales_data_set.olist_orders_dataset o
 JOIN olist_sales_data_set.olist_order_items_dataset oi ON o.order_id = oi.order_id

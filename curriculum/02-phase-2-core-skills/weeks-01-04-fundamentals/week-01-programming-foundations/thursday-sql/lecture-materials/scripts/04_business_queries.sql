@@ -90,8 +90,8 @@ LIMIT 15;
 SELECT 
     payment_type AS "Payment Method",
     COUNT(*) AS "Number of Transactions",
-    ROUND(AVG(payment_value), 2) AS "Average Transaction Value",
-    ROUND(SUM(payment_value), 2) AS "Total Revenue"
+    ROUND(AVG(payment_value)::NUMERIC, 2) AS "Average Transaction Value",
+    ROUND(SUM(payment_value):: NUMERIC, 2) AS "Total Revenue"
 FROM olist_sales_data_set.olist_order_payments_dataset
 GROUP BY payment_type
 ORDER BY COUNT(*) DESC;
@@ -100,8 +100,8 @@ ORDER BY COUNT(*) DESC;
 SELECT 
     MIN(payment_value) AS "Minimum Payment",
     MAX(payment_value) AS "Maximum Payment", 
-    ROUND(AVG(payment_value), 2) AS "Average Payment",
-    ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY payment_value), 2) AS "Median Payment",
+    ROUND(AVG(payment_value)::NUMERIC, 2) AS "Average Payment",
+    ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY payment_value):: NUMERIC, 2) AS "Median Payment",
     COUNT(*) AS "Total Payments"
 FROM olist_sales_data_set.olist_order_payments_dataset;
 
@@ -276,6 +276,8 @@ FROM olist_sales_data_set.olist_customers_dataset c;
 
 -- 🏆 Challenge 1: Find the most expensive single order
 -- (Hint: Use MAX with payment_value)
+SELECT
+    order_id
 
 -- 🏆 Challenge 2: Count how many orders were placed in 2018
 -- (Hint: Use WHERE with EXTRACT(YEAR FROM ...))
