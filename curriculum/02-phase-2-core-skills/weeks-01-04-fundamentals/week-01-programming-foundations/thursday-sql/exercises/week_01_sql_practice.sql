@@ -32,7 +32,7 @@ You're just learning new syntax to express the same ideas.
 -- Hint: Use SELECT with a text message
 
 -- Your solution here:
-
+SELECT 'I am connected to the database!' AS connection_status;
 
 
 
@@ -42,7 +42,7 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT * FROM olist_sales_data_set.olist_orders_dataset LIMIT 5;
 
 -- Your solution here:
-
+SELECT * FROM olist_sales_data_set.olist_orders_dataset LIMIT 5;
 
 
 
@@ -52,7 +52,11 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT order_id, order_status FROM olist_sales_data_set.olist_orders_dataset LIMIT 10;
 
 -- Your solution here:
-
+SELECT
+order_id,
+order_status
+FROM olist_sales_data_set.olist_orders_dataset
+LIMIT 10;
 
 
 
@@ -66,7 +70,9 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT COUNT(*) FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Your solution here:
-
+SELECT
+COUNT (*)
+FROM olist_sales_data_set.olist_orders_dataset;
 
 
 
@@ -76,7 +82,9 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT COUNT(*) FROM olist_sales_data_set.olist_customers_dataset;
 
 -- Your solution here:
-
+SELECT
+COUNT(*)
+FROM olist_sales_data_set.olist_customers_dataset
 
 
 
@@ -86,7 +94,8 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT COUNT(*) FROM olist_sales_data_set.olist_products_dataset;
 
 -- Your solution here:
-
+SELECT COUNT(*)
+FROM olist_sales_data_set.olist_products_dataset
 
 
 
@@ -100,6 +109,13 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT order_id, order_status, order_purchase_timestamp FROM olist_sales_data_set.olist_orders_dataset ORDER BY order_purchase_timestamp DESC LIMIT 10;
 
 -- Your solution here:
+SELECT
+order_id,
+order_status,
+order_purchase_timestamp
+FROM olist_sales_data_set.olist_orders_dataset
+ORDER BY order_purchase_timestamp DESC
+LIMIT 10;
 
 
 
@@ -110,8 +126,11 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT * FROM olist_sales_data_set.olist_orders_dataset ORDER BY order_purchase_timestamp ASC LIMIT 5;
 
 -- Your solution here:
-
-
+SELECT
+order_purchase_timestamp
+FROM olist_sales_data_set.olist_orders_dataset
+ORDER BY order_purchase_timestamp ASC
+LIMIT 5;
 
 
 -- =============================================================================
@@ -124,7 +143,9 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT order_status, COUNT(*) FROM olist_sales_data_set.olist_orders_dataset GROUP BY order_status;
 
 -- Your solution here:
-
+SELECT COUNT (*)
+FROM olist_sales_data_set.olist_orders_dataset
+GROUP BY order_status;
 
 
 
@@ -134,6 +155,12 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT customer_state, COUNT(*) FROM olist_sales_data_set.olist_customers_dataset GROUP BY customer_state ORDER BY COUNT(*) DESC LIMIT 10;
 
 -- Your solution here:
+SELECT
+customer_state, COUNT(*)
+FROM olist_sales_data_set.olist_customers_dataset
+GROUP BY customer_state
+ORDER BY COUNT(*) DESC
+LIMIT 10;
 
 
 
@@ -144,8 +171,11 @@ You're just learning new syntax to express the same ideas.
 -- Hint: SELECT payment_type, COUNT(*) FROM olist_sales_data_set.olist_order_payments_dataset GROUP BY payment_type ORDER BY COUNT(*) DESC;
 
 -- Your solution here:
-
-
+SELECT payment_type,
+COUNT(*)
+FROM olist_sales_data_set.olist_order_payments_dataset
+GROUP BY payment_type
+ORDER BY COUNT(*) DESC;
 
 
 -- =============================================================================
