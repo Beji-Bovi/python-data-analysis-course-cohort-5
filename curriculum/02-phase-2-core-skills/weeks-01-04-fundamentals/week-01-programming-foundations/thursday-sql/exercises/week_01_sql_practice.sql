@@ -188,7 +188,10 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT MIN(order_purchase_timestamp), MAX(order_purchase_timestamp) FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Your solution here:
-
+SELECT 
+MIN(order_purchase_timestamp) AS earliest_order,
+MAX(order_purchase_timestamp) AS latest_order
+FROM olist_sales_data_set.olist_orders_dataset;
 
 
 
@@ -198,8 +201,11 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT MIN(payment_value), MAX(payment_value), AVG(payment_value) FROM olist_sales_data_set.olist_order_payments_dataset;
 
 -- Your solution here:
-
-
+SELECT 
+MIN(payment_value),
+MAX(payment_value),
+AVG(payment_value)
+FROM olist_sales_data_set.olist_order_payments_dataset;
 
 
 -- Exercise 14: Missing Data Check
@@ -208,7 +214,11 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT COUNT(*) - COUNT(order_delivered_customer_date) FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Your solution here:
-
+SELECT 
+COUNT(*) AS total_orders,
+COUNT(order_delivered_customer_date) AS delivered_orders_date,
+COUNT(*) - COUNT(order_delivered_customer_date) AS missing_delivery_dates
+FROM olist_sales_data_set.olist_orders_dataset;
 
 
 
@@ -222,9 +232,13 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT customer_city, COUNT(*) FROM olist_sales_data_set.olist_customers_dataset WHERE customer_state = 'SP' GROUP BY customer_city ORDER BY COUNT(*) DESC;
 
 -- Your solution here:
-
-
-
+SELECT customer_city,
+COUNT(*) AS total_customers
+FROM olist_sales_data_set.olist_customers_dataset
+WHERE customer_state = 'SP'
+GROUP BY customer_city
+ORDER BY COUNT(*) DESC
+LIMIT 1;
 
 -- Exercise 16: High-Value Payments
 -- Task: Find all payments over R$ 1000, ordered by value (highest first)
@@ -232,9 +246,12 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT * FROM olist_sales_data_set.olist_order_payments_dataset WHERE payment_value > 1000 ORDER BY payment_value DESC;
 
 -- Your solution here:
-
-
-
+SELECT 
+payment_type,
+payment_value
+FROM olist_sales_data_set.olist_order_payments_dataset
+WHERE payment_value > 1000
+ORDER BY payment_value DESC;
 
 -- Exercise 17: Product Category Exploration
 -- Task: How many different product categories do we have? (exclude NULL values)
@@ -242,7 +259,9 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT COUNT(DISTINCT product_category_name) FROM olist_sales_data_set.olist_products_dataset WHERE product_category_name IS NOT NULL;
 
 -- Your solution here:
-
+SELECT COUNT(DISTINCT product_category_name) AS unique_categories
+FROM olist_sales_data_set.olist_products_dataset
+WHERE product_category_name IS NOT NULL;
 
 
 
@@ -256,18 +275,47 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT EXTRACT(MONTH FROM order_purchase_timestamp) as month, COUNT(*) FROM olist_sales_data_set.olist_orders_dataset WHERE EXTRACT(YEAR FROM order_purchase_timestamp) = 2018 GROUP BY EXTRACT(MONTH FROM order_purchase_timestamp) ORDER BY month;
 
 -- Your solution here:
-
-
-
+SELECT 
+EXTRACT(MONTH FROM order_purchase_timestamp) as month,
+CASE EXTRACT(MONTH FROM order_purchase_timestamp) 
+     WHEN 1 THEN 'January'
+     WHEN 2 THEN 'February'
+     WHEN 3 THEN 'March'
+     WHEN 4 THEN 'April'
+     WHEN 5 THEN 'May'
+     WHEN 6 THEN 'June'
+     WHEN 7 THEN 'July'
+     WHEN 8 THEN 'August'
+     WHEN 9 THEN 'September'
+     WHEN 10 THEN 'October'
+     WHEN 11 THEN 'November'
+     WHEN 12 THEN 'December'
+END AS month_name,
+COUNT(*) AS total_orders
+FROM olist_sales_data_set.olist_orders_dataset
+WHERE EXTRACT(YEAR FROM order_purchase_timestamp) = 2018
+GROUP BY EXTRACT(MONTH FROM order_purchase_timestamp)
+ORDER BY month;
 
 -- Exercise 19: Day of Week Analysis  
 -- Task: Which day of the week has the most orders?
 -- Hint: SELECT EXTRACT(DOW FROM order_purchase_timestamp) as day_of_week, COUNT(*) FROM olist_sales_data_set.olist_orders_dataset GROUP BY EXTRACT(DOW FROM order_purchase_timestamp) ORDER BY COUNT(*) DESC;
 
 -- Your solution here:
-
-
-
+SELECT EXTRACT(DOW FROM order_purchase_timestamp) as day_of_week,
+CASE EXTRACT(DOW FROM order_purchase_timestamp)
+     WHEN 0 THEN 'Sunday'
+     WHEN 1 THEN 'Monday'
+     WHEN 2 THEN 'Tuesday'
+     WHEN 3 THEN 'Wednesday'
+     WHEN 4 THEN 'Thursday'
+     WHEN 5 THEN 'Friday'
+     WHEN 6 THEN 'Saturday'
+END AS day_name,
+COUNT(*) AS total_orders
+FROM olist_sales_data_set.olist_orders_dataset
+GROUP BY EXTRACT(DOW FROM order_purchase_timestamp)
+ORDER BY total_orders DESC;
 
 -- =============================================================================
 -- ADVANCED CHALLENGES (For Early Finishers)
@@ -279,9 +327,11 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT review_score, COUNT(*) FROM olist_sales_data_set.olist_order_reviews_dataset GROUP BY review_score ORDER BY review_score;
 
 -- Your solution here:
-
-
-
+SELECT review_score,
+COUNT(*) AS total_reviews
+FROM olist_sales_data_set.olist_order_reviews_dataset
+GROUP BY review_score
+ORDER BY review_score;
 
 -- Challenge 21: Revenue by Payment Type
 -- Task: Calculate total revenue for each payment method
@@ -289,9 +339,12 @@ ORDER BY COUNT(*) DESC;
 -- Hint: SELECT payment_type, SUM(payment_value) FROM olist_sales_data_set.olist_order_payments_dataset GROUP BY payment_type ORDER BY SUM(payment_value) DESC;
 
 -- Your solution here:
-
-
-
+SELECT payment_type AS payment_method,
+COUNT(*) AS total_transactions,
+ROUND(CAST(SUM(payment_value) AS numeric), 2) AS total_revenue
+FROM olist_sales_data_set.olist_order_payments_dataset
+GROUP BY payment_type
+ORDER BY SUM(payment_value) DESC;
 
 -- Challenge 22: Geographic Revenue Analysis
 -- Task: Which state generates the most revenue? (Join orders, customers, payments)
@@ -299,9 +352,18 @@ ORDER BY COUNT(*) DESC;
 -- Hint: You'll need to JOIN olist_sales_data_set.olist_orders_dataset, olist_sales_data_set.olist_customers_dataset, and olist_sales_data_set.olist_order_payments_dataset
 
 -- Your solution here:
-
-
-
+SELECT 
+    c.customer_state,
+    COUNT(DISTINCT o.order_id) AS total_orders,
+    ROUND(CAST(SUM(p.payment_value) AS numeric), 2) AS total_revenue,
+    ROUND(CAST(AVG(p.payment_value) AS numeric), 2) AS avg_order_value
+FROM olist_sales_data_set.olist_orders_dataset o
+JOIN olist_sales_data_set.olist_customers_dataset c ON o.customer_id = c.customer_id
+LEFT JOIN olist_sales_data_set.olist_order_payments_dataset p ON o.order_id = p.order_id
+WHERE o.order_status = 'delivered'
+GROUP BY c.customer_state
+ORDER BY SUM(p.payment_value) DESC
+LIMIT 10;
 
 -- =============================================================================
 -- REFLECTION SECTION
@@ -309,6 +371,8 @@ ORDER BY COUNT(*) DESC;
 
 -- Exercise 23: Personal Reflection
 -- Task: Write a comment comparing your experience today vs. yesterday
+-- Today felt more productive compared to yesterday because i was able to understanstand the concept between python and SQL
+-- and also getting farmiliar with the SQL syntax.
 
 /*
 Reflection Questions:
@@ -319,9 +383,11 @@ Reflection Questions:
 5. What concepts from yesterday helped you today?
 
 Write your thoughts here:
-
-
-
+1. Python because it feels flexible and intuitive. With Python and pandas, I can manipulate data step by step, test code easily, and instantly see results.
+2. They both store data in tablar form with rows and column. 
+3. In SQL you write queries to tell the database what result you want, while in Python you work directly with the data and combine it with other logic and visualization tools.
+4. Simple aggregations and filtering were easier in SQL because of its concise syntax. More complex data manipulations and visualizations were easier in Python.
+5. Understanding basic data operations like filtering, grouping, and aggregation from yesterday helped a lot today.
 
 */
 
@@ -330,13 +396,27 @@ Write your thoughts here:
 -- =============================================================================
 
 -- Quick Check 1: Count total customers
+SELECT
+COUNT(*) AS total_customers
+FROM olist_sales_data_set.olist_customers_dataset;
 
 -- Quick Check 2: Show 5 newest orders
+SELECT *
+FROM olist_sales_data_set.olist_orders_dataset
+ORDER BY order_purchase_timestamp DESC
+LIMIT 5;
 
 -- Quick Check 3: List all unique order statuses
+SELECT DISTINCT order_status
+FROM olist_sales_data_set.olist_orders_dataset;
 
 -- Quick Check 4: Find the most expensive single payment
-
+SELECT
+payment_type,
+payment_value
+FROM olist_sales_data_set.olist_order_payments_dataset
+ORDER BY payment_value DESC
+LIMIT 1;
 -- =============================================================================
 -- BONUS: Creative Analysis
 -- =============================================================================
@@ -350,11 +430,45 @@ Write your thoughts here:
 -- - How many customers are from your favorite Brazilian city?
 
 -- Your creative query here:
+-- Heaviest product
+SELECT *
+FROM olist_sales_data_set.olist_products_dataset
+WHERE product_weight_g IS NOT NULL
+ORDER BY product_weight_g DESC
+LIMIT 1;
 
+-- Longest product name
+SELECT *
+FROM olist_sales_data_set.olist_products_dataset
+WHERE product_name_lenght IS NOT NULL
+ORDER BY product_name_lenght DESC
+LIMIT 1;
 
+-- Month with the Lowest sales
+SELECT
+EXTRACT(MONTH FROM order_purchase_timestamp) AS month,
+CASE EXTRACT(MONTH FROM order_purchase_timestamp)
+     WHEN 1 THEN 'January'
+     WHEN 2 THEN 'February'
+     WHEN 3 THEN 'March'
+     WHEN 4 THEN 'April'
+     WHEN 5 THEN 'May'
+     WHEN 6 THEN 'June'
+     WHEN 7 THEN 'July'
+     WHEN 8 THEN 'August'
+     WHEN 9 THEN 'September'
+     WHEN 10 THEN 'October'
+     WHEN 11 THEN 'November'
+     WHEN 12 THEN 'December'
+END AS month_name,
+SUM(oi.price) AS total_sales
+FROM olist_sales_data_set.olist_orders_dataset o
+JOIN olist_sales_data_set.olist_order_items_dataset oi ON o.order_id = oi.order_id
+GROUP BY month, month_name
+ORDER BY total_sales ASC
+LIMIT 10;
 
-
-/*
+*/
 CONGRATULATIONS! 🎉
 
 If you completed these exercises, you've successfully:
