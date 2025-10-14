@@ -28,11 +28,8 @@ SELECT
     
     -- Division: Price per freight unit (price efficiency)
     CASE 
-<<<<<<< HEAD
         WHEN freight_value > 0 THEN ROUND(price / freight_value, 2)
-=======
         WHEN freight_value > 0 THEN ROUND(price / freight_value) AS NUMERIC), 2)
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL 
     END AS price_freight_ratio
 
@@ -58,19 +55,16 @@ SELECT
     oi.price + oi.freight_value AS total_order_value,
     
     -- Freight as percentage of price (key logistics KPI)
-<<<<<<< HEAD
     ROUND((oi.freight_value / oi.price * 100), 2) AS freight_percentage,
     
     -- Price per gram (efficiency for weight-based products)
     CASE 
         WHEN p.product_weight_g > 0 THEN ROUND(oi.price / p.product_weight_g, 4)
-=======
     ROUND(CAST(oi.freight_value / oi.price * 100 AS NUMERIC), 2) AS freight_percentage,
     
     -- Price per gram (efficiency for weight-based products)
     CASE 
         WHEN p.product_weight_g > 0 THEN ROUND((oi.price::NUMERIC / p.product_weight_g::NUMERIC), 4)
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL 
     END AS price_per_gram,
     
@@ -80,21 +74,15 @@ SELECT
     -- Value density (price per cubic cm)
     CASE 
         WHEN (p.product_length_cm * p.product_height_cm * p.product_width_cm) > 0
-<<<<<<< HEAD
         THEN ROUND(oi.price / (p.product_length_cm * p.product_height_cm * p.product_width_cm), 6)
-=======
         THEN ROUND(oi.price::NUMERIC / (p.product_length_cm * p.product_height_cm * p.product_width_cm)::NUMERIC, 6)
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS value_density,
     
     -- Shipping efficiency score (lower is better)
     CASE 
-<<<<<<< HEAD
         WHEN p.product_weight_g > 0 THEN ROUND(oi.freight_value / p.product_weight_g, 4)
-=======
         WHEN p.product_weight_g > 0 THEN ROUND((oi.freight_value::NUMERIC / p.product_weight_g::NUMERIC), 4)
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS shipping_cost_per_gram
 
@@ -131,11 +119,8 @@ SELECT
     oi.price - (oi.price * 0.60) - (oi.price * 0.15) AS estimated_gross_profit,
     
     -- Gross profit margin percentage
-<<<<<<< HEAD
-    ROUND(((oi.price - (oi.price * 0.75)) / oi.price * 100), 2) AS gross_profit_margin_pct,
-=======
     ROUND(((oi.price - (oi.price * 0.75)) / oi.price * 100)::NUMERIC, 2) AS gross_profit_margin_pct,
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
+    ROUND(((oi.price - (oi.price * 0.75)) / oi.price * 100)::NUMERIC, 2) AS gross_profit_margin_pct,
     
     -- Revenue per order item
     (oi.price + oi.freight_value) / oi.order_item_id AS revenue_per_item,
