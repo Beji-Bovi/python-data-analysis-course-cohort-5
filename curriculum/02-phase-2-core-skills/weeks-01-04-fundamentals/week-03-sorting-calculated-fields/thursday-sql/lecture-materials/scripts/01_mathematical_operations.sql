@@ -154,11 +154,8 @@ SELECT
     oi.price - AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) AS price_diff_from_avg,
     
     -- Price as percentage of category average
-<<<<<<< HEAD
     ROUND((oi.price / AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) * 100), 1) AS price_vs_category_avg_pct,
-=======
     ROUND((oi.price / AVG(oi.price) OVER (PARTITION BY pct.product_category_name_english) * 100)::NUMERIC, 1) AS price_vs_category_avg_pct,
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
     
     -- Price ranking within category
     RANK() OVER (PARTITION BY pct.product_category_name_english ORDER BY oi.price DESC) AS price_rank_in_category
@@ -193,32 +190,26 @@ SELECT
     END AS pricing_pattern,
     
     -- Efficiency ratios for business analysis
-<<<<<<< HEAD
     ROUND(oi.freight_value / oi.price, 3) AS freight_to_price_ratio,
     
     -- Weight-based shipping efficiency
     CASE 
         WHEN p.product_weight_g > 0 
         THEN ROUND(oi.freight_value / (p.product_weight_g / 1000.0), 2) -- Cost per kg
-=======
     ROUND(oi.freight_value / oi.price::NUMERIC, 3) AS freight_to_price_ratio,
 
     -- Weight-based shipping efficiency
     CASE 
         WHEN p.product_weight_g > 0 
         THEN ROUND(oi.freight_value / (p.product_weight_g / 1000.0)::NUMERIC, 2) -- Cost per kg
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS shipping_cost_per_kg,
     
     -- Value proposition score (higher is better)
     CASE 
         WHEN oi.freight_value > 0 AND p.product_weight_g > 0
-<<<<<<< HEAD
         THEN ROUND((oi.price * 1000) / (oi.freight_value * p.product_weight_g), 2)
-=======
         THEN ROUND((oi.price * 1000) / (oi.freight_value * p.product_weight_g)::NUMERIC, 2)
->>>>>>> 21a7d4f374a95d8fc8d7d8ef95825e79209bf93b
         ELSE NULL
     END AS value_proposition_score
 
